@@ -120,3 +120,22 @@ export async function getRestaurantIdBySlug(slug: string): Promise<number | null
   const rows = await sql`SELECT id FROM restaurants WHERE slug = ${slug}`;
   return rows.length > 0 ? rows[0].id : null;
 }
+
+// Picks which restaurant the homepage hero features: the one with the
+// best average among restaurants with at least 3 reviews (so a single
+// 5-star review can't dominate), falling back to whoever has the most
+// reviews if nobody clears that bar yet. This is selection over numbers
+// Postgres already computed — not a new aggregation — and it's still
+// the only place doing the selecting, same as everywhere else.
+export async function getFeaturedRestaurantSlug(): Promise<string | null> {
+  const rows = await sql`
+    SELECT r.slug
+    FROM restaurants r
+    LEFT JOIN reviews rv ON rv.restaurant_id = r.id
+    GROUP BY r.id
+    HAVING COUNT(rv.id) > 0
+    ORDER BY (COUNT(rv.id) >= 3) DESC, AVG(rv.rating) DESC, COUNT(rv.id) DESC
+    LIMIT 1
+  `;
+  return rows.length > 0 ? rows[0].slug : null;
+}

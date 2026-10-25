@@ -11,6 +11,14 @@ body {
   font-family: var(--font-body), Arial, Helvetica, sans-serif;
 }
 
+/* The homepage hero's one deliberate motion moment: its star rating
+   arrives one star at a time on load, tied to the product's own
+   mechanic rather than a generic entrance. Used nowhere else. */
+@keyframes hero-star-in {
+  from { opacity: 0; transform: scale(0.4); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
