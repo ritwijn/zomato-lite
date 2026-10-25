@@ -16,7 +16,7 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-[#faf7f2] text-[#171412]">
-      <div className="mx-auto max-w-5xl px-6 py-14 sm:py-16">
+      <div className="mx-auto max-w-[1320px] px-6 py-14 sm:py-16 lg:px-10">
         <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold tracking-[-0.01em]">
           Zomato Lite
         </h1>
@@ -34,7 +34,7 @@ export default async function Home() {
               />
             </div>
             <div className="flex flex-col justify-center">
-              <p className="font-[family-name:var(--font-display)] text-3xl font-semibold leading-[1.15] tracking-[-0.01em] sm:text-4xl">
+              <p className="font-[family-name:var(--font-display)] text-3xl font-semibold leading-[1.15] tracking-[-0.01em] sm:text-4xl lg:text-5xl">
                 &ldquo;{featured.latestReview.comment}&rdquo;
               </p>
               <div className="mt-5">
@@ -54,7 +54,7 @@ export default async function Home() {
           <h2 className="text-sm font-medium text-[#6b625b]">All restaurants</h2>
         </div>
 
-        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {restaurants.map((restaurant) => (
             <Link
               key={restaurant.slug}
