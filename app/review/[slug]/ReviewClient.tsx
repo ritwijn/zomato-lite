@@ -45,10 +45,10 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
   };
 
   return (
-    <div className="min-h-screen bg-[#141414] text-[#f2efe9]">
+    <div className="min-h-screen bg-[#0A0A0C] text-white">
       <div className="mx-auto max-w-[560px] px-5 py-16">
         {restaurant && (
-          <div className="relative mb-6 h-40 w-full overflow-hidden rounded-md border border-[#2E2C29] bg-[#2E2C29]">
+          <div className="relative mb-6 h-40 w-full overflow-hidden rounded-md border border-stone-800 bg-stone-800">
             <Image
               src={imageForCuisine(restaurant.cuisine)}
               alt={`${restaurant.cuisine} food at ${restaurant.name}`}
@@ -60,11 +60,11 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
         )}
 
         <div className="mb-12">
-          <h1 className="font-[family-name:var(--font-display)] text-[32px] font-semibold leading-tight tracking-[-0.01em]">
+          <h1 className="font-[family-name:var(--font-display)] text-[32px] font-semibold leading-tight tracking-[-0.01em] text-white">
             {restaurant ? restaurant.name : 'Loading...'}
           </h1>
           {restaurant && (
-            <p className="mt-1.5 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.08em] text-[#9B9690]">
+            <p className="mt-1.5 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.08em] text-stone-400">
               {restaurant.cuisine} · {restaurant.area}
             </p>
           )}
@@ -72,7 +72,7 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
 
         <form onSubmit={handleSubmit} className="space-y-9">
           <div>
-            <div className="mb-3 text-sm font-medium">Your rating</div>
+            <div className="mb-3 text-sm font-medium text-white">Your rating</div>
             <div className="flex gap-2" onMouseLeave={() => setHover(0)}>
               {[1, 2, 3, 4, 5].map((n) => {
                 const filled = (hover || rating || 0) >= n;
@@ -84,11 +84,11 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
                     aria-pressed={rating === n}
                     onMouseEnter={() => setHover(n)}
                     onClick={() => setRating(n)}
-                    className={`flex h-11 w-11 items-center justify-center rounded-md border outline-none transition-colors active:scale-95 focus-visible:[box-shadow:0_0_0_2px_#141414,0_0_0_4px_#F2EFE9] ${
-                      filled ? 'border-[#D97706] bg-[#D97706]/10' : 'border-[#2E2C29] bg-transparent'
+                    className={`flex h-11 w-11 items-center justify-center rounded-md border outline-none transition-colors active:scale-95 focus-visible:[box-shadow:0_0_0_2px_#0A0A0C,0_0_0_4px_#FFFFFF] ${
+                      filled ? 'border-amber-500 bg-amber-500/10' : 'border-stone-800 bg-transparent'
                     }`}
                   >
-                    <StarIcon filled={filled} className={`h-[18px] w-[18px] ${filled ? 'text-[#D97706]' : 'text-[#5C5954]'}`} />
+                    <StarIcon filled={filled} className={`h-[18px] w-[18px] ${filled ? 'text-amber-500' : 'text-stone-600'}`} />
                   </button>
                 );
               })}
@@ -96,19 +96,19 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
           </div>
 
           <div>
-            <label className="mb-3 block text-sm font-medium" htmlFor="comment">Your review</label>
+            <label className="mb-3 block text-sm font-medium text-white" htmlFor="comment">Your review</label>
             <textarea
               id="comment"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="What stood out?"
-              className="w-full rounded-md border border-[#2E2C29] bg-transparent px-3.5 py-3 text-[15px] leading-relaxed text-[#f2efe9] outline-none placeholder:text-[#5C5954] focus:border-[#F2EFE9] focus-visible:[box-shadow:0_0_0_2px_#F2EFE9]"
+              className="w-full rounded-md border border-stone-800 bg-transparent px-3.5 py-3 text-[15px] leading-relaxed text-white outline-none placeholder:text-stone-600 focus:border-white focus-visible:[box-shadow:0_0_0_2px_#FFFFFF]"
               rows={5}
             />
           </div>
 
           {error && (
-            <div role="alert" className="text-sm text-[#E5584F]">{error}</div>
+            <div role="alert" className="text-sm text-red-400">{error}</div>
           )}
 
           <button

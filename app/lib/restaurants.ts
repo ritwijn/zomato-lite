@@ -124,3 +124,35 @@ export async function getRestaurantIdBySlug(slug: string): Promise<number | null
   const rows = await sql`SELECT id FROM restaurants WHERE slug = ${slug}`;
   return rows.length > 0 ? rows[0].id : null;
 }
+
+export type SpotlightRestaurant = RestaurantDetail & { positivePercentage: number };
+
+// The homepage spotlight: the best-rated restaurant that actually has
+// reviews, plus one more real, honestly-computed number — the share of
+// its reviews rated 4 stars or higher. Both numbers come straight from
+// Postgres; neither is invented, and both would be wrong if the app
+// ever stored a cached average instead of computing it fresh.
+export async function getSpotlightRestaurant(): Promise<SpotlightRestaurant | null> {
+  const top = await sql`
+    SELECT r.slug
+    FROM restaurants r
+    JOIN reviews rv ON rv.restaurant_id = r.id
+    GROUP BY r.id
+    ORDER BY AVG(rv.rating) DESC, COUNT(rv.id) DESC
+    LIMIT 1
+  `;
+  if (top.length === 0) return null;
+
+  const slug = top[0].slug;
+  const detail = await getRestaurantBySlug(slug);
+  if (!detail) return null;
+
+  const positive = await sql`
+    SELECT (COUNT(*) FILTER (WHERE rv.rating >= 4) * 100.0 / COUNT(*))::numeric(10,0) AS positive_percentage
+    FROM reviews rv
+    JOIN restaurants r ON r.id = rv.restaurant_id
+    WHERE r.slug = ${slug}
+  `;
+
+  return { ...detail, positivePercentage: parseFloat(positive[0].positive_percentage) };
+}

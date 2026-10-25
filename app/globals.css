@@ -1,14 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --background: #141414;
-  --foreground: #f2efe9;
+  --background: #0a0a0c;
+  --foreground: #ffffff;
 }
 
 body {
-  background: #141414;
-  color: #f2efe9;
+  background: #0a0a0c;
+  color: #ffffff;
   font-family: var(--font-body), Arial, Helvetica, sans-serif;
+}
+
+/* The spotlight hero's metric bars fill in on mount. A CSS transition
+   alone never plays on first paint (it only fires on a later style
+   change), so this is a keyframe animation instead — confirmed by
+   checking the computed width after load, not assumed. */
+@keyframes grow-width {
+  from { width: 0%; }
+  to { width: var(--bar-width); }
 }
 
 @media (prefers-reduced-motion: reduce) {
