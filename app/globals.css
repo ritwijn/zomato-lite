@@ -11,6 +11,13 @@ body {
   font-family: var(--font-body), Arial, Helvetica, sans-serif;
 }
 
+/* Smooth-scrolls the "more restaurants below" anchor link under the
+   carousel. Already downgraded to instant for reduced-motion users by
+   the media query below, which sets scroll-behavior: auto on *. */
+html {
+  scroll-behavior: smooth;
+}
+
 /* The spotlight hero's metric bars fill in on mount. A CSS transition
    alone never plays on first paint (it only fires on a later style
    change), so this is a keyframe animation instead — confirmed by

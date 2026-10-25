@@ -45,10 +45,22 @@ export default async function Home() {
               Popular picks
             </p>
             <PopularCarousel picks={topPicks} />
+
+            {listed.length > 0 && (
+              <a
+                href="#all-restaurants"
+                className="mt-5 flex items-center justify-center gap-1.5 rounded-md py-2 text-xs text-stone-500 outline-none transition-colors hover:text-stone-300 focus-visible:[box-shadow:0_0_0_2px_#0A0A0C,0_0_0_4px_#FFFFFF]"
+              >
+                {listed.length} more {listed.length === 1 ? 'restaurant' : 'restaurants'} below
+                <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 8l5 5 5-5" />
+                </svg>
+              </a>
+            )}
           </div>
         )}
 
-        <div className="mb-4 border-b border-stone-800 pb-2">
+        <div id="all-restaurants" className="mb-4 scroll-mt-20 border-b border-stone-800 pb-2">
           <h2 className="font-[family-name:var(--font-mono)] text-xs uppercase tracking-widest text-stone-400">
             All restaurants
           </h2>
