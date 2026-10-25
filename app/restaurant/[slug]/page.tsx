@@ -1,15 +1,12 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Stars } from '@/app/components/Stars';
 import { getRestaurantBySlug } from '@/app/lib/restaurants';
+import { imageForCuisine } from '@/app/lib/cuisineImages';
+import { primaryButtonClass, secondaryLinkClass } from '@/app/components/buttonStyles';
 
 export const dynamic = 'force-dynamic';
-
-const linkClass =
-  'text-sm text-[#6b625b] underline decoration-[#DCCFBE] underline-offset-2 outline-none transition-colors hover:text-[#171412] rounded-sm focus-visible:[box-shadow:0_0_0_2px_#faf7f2,0_0_0_4px_#8F6A14]';
-
-const ctaClass =
-  'mt-4 inline-block rounded-md bg-[#8F6A14] px-4 py-2 text-sm font-medium text-white outline-none transition-colors hover:bg-[#765909] focus-visible:[box-shadow:0_0_0_2px_#faf7f2,0_0_0_4px_#8F6A14]';
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -30,11 +27,22 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   return (
     <div className="min-h-screen bg-[#faf7f2] text-[#171412]">
       <div className="mx-auto max-w-[560px] px-5 py-16">
-        <Link href="/" className={linkClass}>
+        <Link href="/" className={secondaryLinkClass}>
           ← All restaurants
         </Link>
 
-        <div className="mb-10 mt-6">
+        <div className="relative mt-6 mb-8 aspect-[16/9] w-full overflow-hidden rounded-lg bg-[#DCCFBE]">
+          <Image
+            src={imageForCuisine(cuisine)}
+            alt={`${cuisine} food at ${name}`}
+            fill
+            sizes="560px"
+            priority
+            className="object-cover"
+          />
+        </div>
+
+        <div className="mb-10">
           <h1 className="font-[family-name:var(--font-display)] text-[32px] font-semibold leading-tight tracking-[-0.01em]">{name}</h1>
           <p className="mt-1.5 text-[13px] text-[#6b625b]">{cuisine} · {area}</p>
         </div>
@@ -50,8 +58,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
         {!latestReview ? (
           <div className="mb-10 rounded-lg border border-dashed border-[#DCCFBE] px-5 py-9 text-center">
-            <p className="text-sm text-[#6b625b]">No one&rsquo;s reviewed this place yet.</p>
-            <Link href={`/review/${slug}`} className={ctaClass}>
+            <p className="mb-4 text-sm text-[#6b625b]">No one&rsquo;s reviewed this place yet.</p>
+            <Link href={`/review/${slug}`} className={primaryButtonClass}>
               Be the first to review
             </Link>
           </div>
@@ -75,7 +83,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             )}
 
             <div>
-              <Link href={`/review/${slug}`} className={linkClass}>
+              <Link href={`/review/${slug}`} className={primaryButtonClass}>
                 Write a review
               </Link>
             </div>

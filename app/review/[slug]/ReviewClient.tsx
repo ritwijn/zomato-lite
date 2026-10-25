@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
 import { StarIcon } from '@/app/components/Stars';
+import { imageForCuisine } from '@/app/lib/cuisineImages';
+import { primaryButtonClass, primaryButtonDisabledClass, secondaryLinkClass } from '@/app/components/buttonStyles';
 
 type Restaurant = { name: string; cuisine: string; area: string } | null;
-
-const linkClass =
-  'text-sm text-[#6b625b] underline decoration-[#DCCFBE] underline-offset-2 outline-none transition-colors hover:text-[#171412] rounded-sm focus-visible:[box-shadow:0_0_0_2px_#faf7f2,0_0_0_4px_#8F6A14]';
 
 export default function ReviewClient({ slug, restaurant }: { slug: string; restaurant: Restaurant }) {
   const router = useRouter();
@@ -47,6 +47,18 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
   return (
     <div className="min-h-screen bg-[#faf7f2] text-[#171412]">
       <div className="mx-auto max-w-[560px] px-5 py-16">
+        {restaurant && (
+          <div className="relative mb-6 h-40 w-full overflow-hidden rounded-lg bg-[#DCCFBE]">
+            <Image
+              src={imageForCuisine(restaurant.cuisine)}
+              alt={`${restaurant.cuisine} food at ${restaurant.name}`}
+              fill
+              sizes="560px"
+              className="object-cover"
+            />
+          </div>
+        )}
+
         <div className="mb-12">
           <h1 className="font-[family-name:var(--font-display)] text-[32px] font-semibold leading-tight tracking-[-0.01em]">
             {restaurant ? restaurant.name : 'Loading...'}
@@ -98,18 +110,14 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
           <button
             type="submit"
             disabled={!canSubmit}
-            className={`rounded-md px-5 py-2.5 text-sm font-medium outline-none transition-colors focus-visible:[box-shadow:0_0_0_2px_#faf7f2,0_0_0_4px_#8F6A14] ${
-              canSubmit
-                ? 'bg-[#8F6A14] text-white hover:bg-[#765909]'
-                : 'cursor-not-allowed border border-[#DCCFBE] bg-transparent text-[#b5aca3]'
-            }`}
+            className={canSubmit ? primaryButtonClass : primaryButtonDisabledClass}
           >
             {submitting ? 'Posting…' : 'Post review'}
           </button>
         </form>
 
         <div className="mt-12">
-          <Link href={`/restaurant/${slug}`} className={linkClass}>
+          <Link href={`/restaurant/${slug}`} className={secondaryLinkClass}>
             Back to restaurant
           </Link>
         </div>

@@ -20,14 +20,14 @@ export default async function Home() {
         </div>
 
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-          {restaurants.map((restaurant, index) => (
+          {restaurants.map((restaurant) => (
             <Link
               key={restaurant.slug}
               href={`/restaurant/${restaurant.slug}`}
               className="group block rounded-lg outline-none focus-visible:[box-shadow:0_0_0_2px_#faf7f2,0_0_0_4px_#8F6A14]"
             >
               <div className="overflow-hidden rounded-lg border border-[#DCCFBE] transition-colors group-hover:border-[#8F6A14]/50">
-                <RestaurantTile index={index} name={restaurant.name} />
+                <RestaurantTile name={restaurant.name} cuisine={restaurant.cuisine} />
                 <div className="p-4">
                   <h2 className="font-[family-name:var(--font-display)] text-[19px] font-semibold leading-snug tracking-[-0.005em]">
                     {restaurant.name}
