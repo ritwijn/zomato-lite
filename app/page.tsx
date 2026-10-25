@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getAllRestaurants, getTopRestaurants } from '@/app/lib/restaurants';
-import { RestaurantRow } from '@/app/components/RestaurantRow';
+import { RestaurantList } from '@/app/components/RestaurantList';
 import { PopularCarousel } from '@/app/components/PopularCarousel';
 
 export const dynamic = 'force-dynamic';
@@ -66,17 +66,7 @@ export default async function Home() {
           </h2>
         </div>
 
-        <div className="space-y-3">
-          {listed.map((restaurant) => (
-            <Link
-              key={restaurant.slug}
-              href={`/restaurant/${restaurant.slug}`}
-              className="group block rounded-xl outline-none focus-visible:[box-shadow:0_0_0_2px_#0A0A0C,0_0_0_4px_#FFFFFF]"
-            >
-              <RestaurantRow restaurant={restaurant} />
-            </Link>
-          ))}
-        </div>
+        <RestaurantList restaurants={listed} />
       </div>
     </div>
   );
