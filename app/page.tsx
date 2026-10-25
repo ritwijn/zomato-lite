@@ -14,6 +14,10 @@ export default async function Home() {
     getFeaturedRestaurantSlug(),
   ]);
   const featured = featuredSlug ? await getRestaurantBySlug(featuredSlug) : null;
+  // The featured restaurant already gets the hero treatment above —
+  // leaving it in this list too would show the same card twice in a
+  // row, which reads as a bug, not a feature.
+  const gridRestaurants = featured ? restaurants.filter((r) => r.slug !== featured.slug) : restaurants;
 
   return (
     <div className="min-h-screen bg-[#faf7f2] text-[#171412]">
@@ -52,11 +56,11 @@ export default async function Home() {
         )}
 
         <div className="mt-12 mb-6 sm:mt-14">
-          <h2 className="text-sm font-medium text-[#6b625b]">All restaurants</h2>
+          <h2 className="text-sm font-medium text-[#6b625b]">More restaurants</h2>
         </div>
 
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {restaurants.map((restaurant) => (
+          {gridRestaurants.map((restaurant) => (
             <Link
               key={restaurant.slug}
               href={`/restaurant/${restaurant.slug}`}
