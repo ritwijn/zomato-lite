@@ -45,10 +45,10 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
   };
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#171412]">
+    <div className="min-h-screen bg-[#faf9f5] text-[#1a1a1a]">
       <div className="mx-auto max-w-[560px] px-5 py-16">
         {restaurant && (
-          <div className="relative mb-6 h-40 w-full overflow-hidden rounded-lg bg-[#DCCFBE]">
+          <div className="relative mb-6 h-40 w-full overflow-hidden rounded-md border border-[#E7E5E4] bg-[#E7E5E4]">
             <Image
               src={imageForCuisine(restaurant.cuisine)}
               alt={`${restaurant.cuisine} food at ${restaurant.name}`}
@@ -64,14 +64,16 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
             {restaurant ? restaurant.name : 'Loading...'}
           </h1>
           {restaurant && (
-            <p className="mt-1.5 text-[13px] text-[#6b625b]">{restaurant.cuisine} · {restaurant.area}</p>
+            <p className="mt-1.5 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.08em] text-[#78716C]">
+              {restaurant.cuisine} · {restaurant.area}
+            </p>
           )}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-9">
           <div>
             <div className="mb-3 text-sm font-medium">Your rating</div>
-            <div className="flex gap-1.5" onMouseLeave={() => setHover(0)}>
+            <div className="flex gap-2" onMouseLeave={() => setHover(0)}>
               {[1, 2, 3, 4, 5].map((n) => {
                 const filled = (hover || rating || 0) >= n;
                 return (
@@ -82,9 +84,11 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
                     aria-pressed={rating === n}
                     onMouseEnter={() => setHover(n)}
                     onClick={() => setRating(n)}
-                    className="h-9 w-9 rounded-sm outline-none transition-transform active:scale-95 focus-visible:[box-shadow:0_0_0_2px_#faf7f2,0_0_0_4px_#8F6A14]"
+                    className={`flex h-11 w-11 items-center justify-center rounded-md border outline-none transition-colors active:scale-95 focus-visible:[box-shadow:0_0_0_2px_#faf9f5,0_0_0_4px_#1A1A1A] ${
+                      filled ? 'border-[#D97706] bg-[#D97706]/10' : 'border-[#E7E5E4] bg-transparent'
+                    }`}
                   >
-                    <StarIcon filled={filled} className={filled ? 'text-[#8F6A14]' : 'text-[#DCCFBE]'} />
+                    <StarIcon filled={filled} className={`h-[18px] w-[18px] ${filled ? 'text-[#D97706]' : 'text-[#A8A29E]'}`} />
                   </button>
                 );
               })}
@@ -98,7 +102,7 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="What stood out?"
-              className="w-full rounded-lg border border-[#DCCFBE] bg-transparent px-3.5 py-3 text-[15px] leading-relaxed text-[#171412] outline-none placeholder:text-[#b5aca3] focus:border-[#8F6A14] focus-visible:[box-shadow:0_0_0_2px_#8F6A14]"
+              className="w-full rounded-md border border-[#E7E5E4] bg-transparent px-3.5 py-3 text-[15px] leading-relaxed text-[#1a1a1a] outline-none placeholder:text-[#A8A29E] focus:border-[#1A1A1A] focus-visible:[box-shadow:0_0_0_2px_#1A1A1A]"
               rows={5}
             />
           </div>

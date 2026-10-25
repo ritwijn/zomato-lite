@@ -7,7 +7,7 @@ import { imageForCuisine } from '@/app/lib/cuisineImages';
 // photo is more honest than inventing one).
 export function RestaurantTile({ name, cuisine }: { name: string; cuisine: string }) {
   return (
-    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-t-lg bg-[#DCCFBE]">
+    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-t-md bg-[#E7E5E4]">
       <Image
         src={imageForCuisine(cuisine)}
         alt={`${cuisine} food at ${name}`}

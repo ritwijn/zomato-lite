@@ -5,7 +5,6 @@ import { Stars } from '@/app/components/Stars';
 import { getRestaurantBySlug } from '@/app/lib/restaurants';
 import { imageForCuisine } from '@/app/lib/cuisineImages';
 import { primaryButtonClass, secondaryLinkClass } from '@/app/components/buttonStyles';
-import { moodColorForRating } from '@/app/lib/moodColor';
 import { formatRelativeTime } from '@/app/lib/relativeTime';
 
 export const dynamic = 'force-dynamic';
@@ -27,13 +26,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const { name, cuisine, area, averageRating, totalReviews, latestReview, reviews } = data;
 
   return (
-    <div className="min-h-screen bg-[#faf7f2] text-[#171412]">
+    <div className="min-h-screen bg-[#faf9f5] text-[#1a1a1a]">
       <div className="mx-auto max-w-[560px] px-5 py-16">
         <Link href="/" className={secondaryLinkClass}>
           ← All restaurants
         </Link>
 
-        <div className="relative mt-6 mb-8 aspect-[16/9] w-full overflow-hidden rounded-lg bg-[#DCCFBE]">
+        <div className="relative mt-6 mb-8 aspect-[16/9] w-full overflow-hidden rounded-md border border-[#E7E5E4] bg-[#E7E5E4]">
           <Image
             src={imageForCuisine(cuisine)}
             alt={`${cuisine} food at ${name}`}
@@ -46,46 +45,49 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
         <div className="mb-10">
           <h1 className="font-[family-name:var(--font-display)] text-[32px] font-semibold leading-tight tracking-[-0.01em]">{name}</h1>
-          <p className="mt-1.5 text-[13px] text-[#6b625b]">{cuisine} · {area}</p>
+          <p className="mt-1.5 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.08em] text-[#78716C]">
+            {cuisine} · {area}
+          </p>
         </div>
 
         <div className="mb-12 flex items-baseline gap-3">
-          <div
-            className="font-[family-name:var(--font-display)] lining-nums text-8xl font-semibold leading-none tracking-tight"
-            style={averageRating !== null ? { color: moodColorForRating(averageRating) } : undefined}
-          >
+          <div className="font-[family-name:var(--font-display)] lining-nums text-8xl font-semibold leading-none tracking-tight">
             {averageRating === null ? '—' : averageRating.toFixed(1)}
           </div>
-          <div className="text-sm text-[#6b625b]">
-            {totalReviews} {totalReviews === 1 ? 'review' : 'reviews'}
+          <div className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.08em] text-[#78716C]">
+            Average rating · {totalReviews} {totalReviews === 1 ? 'review' : 'reviews'}
           </div>
         </div>
 
         {!latestReview ? (
-          <div className="mb-10 rounded-lg border border-dashed border-[#DCCFBE] px-5 py-9 text-center">
-            <p className="mb-4 text-sm text-[#6b625b]">No one&rsquo;s reviewed this place yet.</p>
+          <div className="mb-10 rounded-md border border-dashed border-[#E7E5E4] px-5 py-9 text-center">
+            <p className="mb-4 text-sm text-[#78716C]">No one&rsquo;s reviewed this place yet.</p>
             <Link href={`/review/${slug}`} className={primaryButtonClass}>
               Be the first to review
             </Link>
           </div>
         ) : (
           <>
-            <div className="mb-10 rounded-lg border-l-2 border-[#8F6A14] bg-[#8F6A14]/[0.06] py-5 pl-5 pr-4">
-              <div className="mb-2 text-[13px] font-medium text-[#8F6A14]">Latest</div>
-              <div className="flex items-center gap-2">
+            <div className="mb-10 border-t border-[#1A1A1A] pt-5">
+              <p className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.08em] text-[#78716C]">
+                Latest feedback
+              </p>
+              <p className="mt-3 font-[family-name:var(--font-display)] text-2xl italic leading-snug tracking-[-0.005em]">
+                &ldquo;{latestReview.comment}&rdquo;
+              </p>
+              <div className="mt-3 flex items-center gap-2">
                 <Stars rating={latestReview.rating} />
-                <span className="text-[13px] text-[#6b625b]">{formatRelativeTime(latestReview.createdAt)}</span>
+                <span className="text-[13px] text-[#78716C]">{formatRelativeTime(latestReview.createdAt)}</span>
               </div>
-              <p className="mt-2.5 text-[15px] leading-relaxed">{latestReview.comment}</p>
             </div>
 
             {reviews.length > 0 && (
-              <div className="mb-10 divide-y divide-[#EAE1D3] border-t border-[#EAE1D3]">
+              <div className="mb-10 divide-y divide-[#E7E5E4] border-t border-[#E7E5E4]">
                 {reviews.map((review) => (
                   <div key={review.id} className="py-4">
                     <div className="flex items-center gap-2">
                       <Stars rating={review.rating} size="sm" />
-                      <span className="text-[13px] text-[#6b625b]">{formatRelativeTime(review.createdAt)}</span>
+                      <span className="text-[13px] text-[#78716C]">{formatRelativeTime(review.createdAt)}</span>
                     </div>
                     <p className="mt-2 text-[15px] leading-relaxed">{review.comment}</p>
                   </div>

@@ -1,21 +1,29 @@
 import type { Metadata } from "next";
-import { Fraunces, Work_Sans } from "next/font/google";
+import { Fraunces, Work_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-// Display face — restaurant names, the big rating number, and the grid
-// monograms. Soft, low-contrast forms on purpose: a high-contrast serif
-// on a cream ground is a well-known generic-design tell.
+// Display face — restaurant names and large rating numbers, including
+// an italic cut for the pulled-quote review treatment.
 const fraunces = Fraunces({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["500", "600"],
+  style: ["normal", "italic"],
 });
 
-// Body/UI face — everything else: meta text, reviews, labels, buttons.
+// Body/UI face — everything else: meta text, reviews, buttons.
 const workSans = Work_Sans({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
+});
+
+// Editorial caption face — small uppercase data labels only
+// ("AVERAGE RATING · 3 REVIEWS"), never body text.
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["500"],
 });
 
 export const metadata: Metadata = {
@@ -27,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${workSans.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${workSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
