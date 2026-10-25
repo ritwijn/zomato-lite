@@ -44,10 +44,25 @@ export default async function Home() {
             <p className="mb-3 font-[family-name:var(--font-mono)] text-xs uppercase tracking-widest text-stone-400">
               Popular picks
             </p>
-            <div className="space-y-4">
-              {topPicks.map((restaurant, i) => (
-                <PopularStack key={restaurant.slug} restaurant={restaurant} rank={i + 1} delayMs={i * 120} />
-              ))}
+            <div className="space-y-5">
+              {topPicks.map((restaurant, i) => {
+                // A small alternating tilt/offset per card so the set
+                // reads as a loosely stacked deck rather than a flat
+                // list — every card stays fully visible, nothing is
+                // hidden behind another.
+                const tilt = [0, -1.1, 1.1][i] ?? 0;
+                const shift = [0, 9, -9][i] ?? 0;
+                return (
+                  <PopularStack
+                    key={restaurant.slug}
+                    restaurant={restaurant}
+                    rank={i + 1}
+                    delayMs={i * 160}
+                    tilt={tilt}
+                    shift={shift}
+                  />
+                );
+              })}
             </div>
           </div>
         )}

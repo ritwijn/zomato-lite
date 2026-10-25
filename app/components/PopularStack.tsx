@@ -8,22 +8,38 @@ import type { SpotlightRestaurant } from '@/app/lib/restaurants';
 // bars below are real, already-computed numbers rendered as a fill,
 // not invented stats: the average rating itself, and the actual share
 // of reviews rated 4 stars or higher.
+//
+// tilt/shift give the card its resting position in the stack (a small
+// alternating rotate + horizontal offset, not a hidden/overlapping
+// card — every card stays fully visible and readable). The entrance
+// keyframe animates *into* that same resting transform via the
+// --tilt/--shift custom properties, so the drop-in and the stacked
+// look are the same motion, not two separate effects layered on top
+// of each other.
 export function PopularStack({
   restaurant,
   rank,
   delayMs = 0,
+  tilt = 0,
+  shift = 0,
 }: {
   restaurant: SpotlightRestaurant;
   rank: number;
   delayMs?: number;
+  tilt?: number;
+  shift?: number;
 }) {
   const { slug, name, cuisine, area, averageRating, totalReviews, latestReview, positivePercentage } = restaurant;
   const ratingPercent = (averageRating! / 5) * 100;
 
   return (
     <div
-      className="rounded-xl border border-stone-800/80 bg-[#121215] p-4 sm:p-5"
-      style={{ animation: `pick-in 0.5s ease-out ${delayMs}ms backwards` }}
+      className="rounded-xl border border-stone-800/80 bg-[#121215] p-4 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)] transition-transform duration-300 ease-out hover:scale-[1.01] sm:p-5"
+      style={{
+        '--tilt': `${tilt}deg`,
+        '--shift': `${shift}px`,
+        animation: `pick-in 0.7s cubic-bezier(0.22,1,0.36,1) ${delayMs}ms both`,
+      } as React.CSSProperties}
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg">
         <Image

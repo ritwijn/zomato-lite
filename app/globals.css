@@ -20,13 +20,16 @@ body {
   to { width: var(--bar-width); }
 }
 
-/* The Popular Picks group's one entrance moment: the spotlight and its
-   two runners-up settle in with a short staggered delay (set per card
-   via inline animation-delay), so the ranked set arrives as a single
-   coordinated reveal rather than three independent effects. */
+/* The Popular Picks group's one entrance moment: each card drops and
+   settles into a slightly fanned resting position — alternating tilt
+   and horizontal offset set per card via the --tilt/--shift custom
+   properties — so the ranked set reads as a loosely stacked deck, not
+   three identical cards in a flat list, and arrives as one
+   coordinated reveal (staggered animation-delay) rather than three
+   independent effects. */
 @keyframes pick-in {
-  from { opacity: 0; transform: translateY(10px) scale(0.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateY(36px) scale(0.94) rotate(0deg); }
+  to { opacity: 1; transform: translateY(0) scale(1) rotate(var(--tilt, 0deg)) translateX(var(--shift, 0px)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
