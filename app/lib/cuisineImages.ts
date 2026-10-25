@@ -9,7 +9,11 @@
 const BASE = 'https://thumb.wikimedia.org/wikipedia/commons/thumb';
 
 export const CUISINE_IMAGES: Record<string, string> = {
-  Indian: `${BASE}/4/41/Butter_Chicken_%26_Butter_Naan_-_Home_-_Chandigarh_-_India_-_0006.jpg/1280px-Butter_Chicken_%26_Butter_Naan_-_Home_-_Chandigarh_-_India_-_0006.jpg`,
+  // "Indian" is only used by Ludhiana Burrito, a Punjabi-Mexican fusion
+  // concept — a curry photo under a restaurant literally named "Burrito"
+  // read as a mismatch, so this one specific key is a burrito, not a
+  // generic "Indian food" shot.
+  Indian: `${BASE}/e/e0/Mission-style_burrio_cross_section.jpg/1280px-Mission-style_burrio_cross_section.jpg`,
   'North Indian': `${BASE}/5/5e/Butter_Chicken_with_Naan.JPG/1280px-Butter_Chicken_with_Naan.JPG`,
   Chinese: `${BASE}/d/d9/Chow_Mein_with_pork_-_Unithai_2025-07-30.jpg/1280px-Chow_Mein_with_pork_-_Unithai_2025-07-30.jpg`,
   Italian: `${BASE}/d/d3/Supreme_pizza.jpg/1280px-Supreme_pizza.jpg`,

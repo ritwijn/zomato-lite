@@ -125,6 +125,29 @@ export async function getRestaurantIdBySlug(slug: string): Promise<number | null
   return rows.length > 0 ? rows[0].id : null;
 }
 
+// Ranks restaurants with reviews by average, best first — real,
+// already-aggregated numbers, just ordered for display. Used for the
+// #2/#3 "Popular picks" cards; the #1 spot gets the fuller
+// getSpotlightRestaurant() treatment below.
+export async function getPopularRestaurants(limit: number): Promise<RestaurantSummary[]> {
+  const rows = await sql`
+    SELECT
+      r.slug,
+      r.name,
+      r.cuisine,
+      r.area,
+      AVG(rv.rating)::numeric(10,1) AS average_rating,
+      COUNT(rv.id)::int AS total_reviews
+    FROM restaurants r
+    JOIN reviews rv ON rv.restaurant_id = r.id
+    GROUP BY r.id
+    ORDER BY AVG(rv.rating) DESC, COUNT(rv.id) DESC
+    LIMIT ${limit}
+  `;
+
+  return (rows as SummaryRow[]).map(mapSummaryRow);
+}
+
 export type SpotlightRestaurant = RestaurantDetail & { positivePercentage: number };
 
 // The homepage spotlight: the best-rated restaurant that actually has
