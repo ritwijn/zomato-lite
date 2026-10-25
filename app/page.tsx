@@ -1,23 +1,16 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import { getAllRestaurants, getFeaturedRestaurantSlug, getRestaurantBySlug } from '@/app/lib/restaurants';
-import { imageForCuisine } from '@/app/lib/cuisineImages';
+import { getAllRestaurants, getPopularRestaurants } from '@/app/lib/restaurants';
 import { RestaurantTile } from '@/app/components/RestaurantTile';
-import { HeroStars } from '@/app/components/HeroStars';
+import { PopularStack } from '@/app/components/PopularStack';
 import { moodColorForRating } from '@/app/lib/moodColor';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [restaurants, featuredSlug] = await Promise.all([
+  const [restaurants, popular] = await Promise.all([
     getAllRestaurants(),
-    getFeaturedRestaurantSlug(),
+    getPopularRestaurants(4),
   ]);
-  const featured = featuredSlug ? await getRestaurantBySlug(featuredSlug) : null;
-  // The featured restaurant already gets the hero treatment above —
-  // leaving it in this list too would show the same card twice in a
-  // row, which reads as a bug, not a feature.
-  const gridRestaurants = featured ? restaurants.filter((r) => r.slug !== featured.slug) : restaurants;
 
   return (
     <div className="min-h-screen bg-[#faf7f2] text-[#171412]">
@@ -25,42 +18,22 @@ export default async function Home() {
         <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold tracking-[-0.01em]">
           Zomato Lite
         </h1>
+        <p className="mt-2 text-[15px] text-[#6b625b]">
+          Honest ratings from people who actually ate there.
+        </p>
 
-        {featured && featured.latestReview && (
-          <div className="mt-8 grid grid-cols-1 gap-6 sm:mt-10 sm:grid-cols-2 sm:gap-10">
-            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg bg-[#DCCFBE]">
-              <Image
-                src={imageForCuisine(featured.cuisine)}
-                alt={`${featured.cuisine} food at ${featured.name}`}
-                fill
-                sizes="(min-width: 640px) 45vw, 100vw"
-                priority
-                className="object-cover"
-              />
-            </div>
-            <div className="flex flex-col justify-center">
-              <p className="font-[family-name:var(--font-display)] text-3xl font-semibold leading-[1.15] tracking-[-0.01em] sm:text-4xl lg:text-5xl">
-                &ldquo;{featured.latestReview.comment}&rdquo;
-              </p>
-              <div className="mt-5">
-                <HeroStars rating={featured.latestReview.rating} />
-              </div>
-              <Link
-                href={`/restaurant/${featured.slug}`}
-                className="mt-3 inline-block w-fit text-[15px] text-[#6b625b] outline-none transition-colors hover:text-[#171412] rounded-sm focus-visible:[box-shadow:0_0_0_2px_#faf7f2,0_0_0_4px_#8F6A14]"
-              >
-                {featured.name} · {featured.cuisine} · {featured.area}
-              </Link>
-            </div>
+        {popular.length > 0 && (
+          <div className="mt-10 sm:mt-12">
+            <PopularStack items={popular} />
           </div>
         )}
 
-        <div className="mt-12 mb-6 sm:mt-14">
-          <h2 className="text-sm font-medium text-[#6b625b]">More restaurants</h2>
+        <div className="mt-16 mb-6 sm:mt-20">
+          <h2 className="text-sm font-medium text-[#6b625b]">All restaurants</h2>
         </div>
 
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {gridRestaurants.map((restaurant) => (
+          {restaurants.map((restaurant) => (
             <Link
               key={restaurant.slug}
               href={`/restaurant/${restaurant.slug}`}
