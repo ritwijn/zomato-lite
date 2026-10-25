@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getAllRestaurants, getTopRestaurants } from '@/app/lib/restaurants';
 import { RestaurantRow } from '@/app/components/RestaurantRow';
-import { PopularStack } from '@/app/components/PopularStack';
+import { PopularCarousel } from '@/app/components/PopularCarousel';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,26 +44,7 @@ export default async function Home() {
             <p className="mb-3 font-[family-name:var(--font-mono)] text-xs uppercase tracking-widest text-stone-400">
               Popular picks
             </p>
-            <div className="space-y-5">
-              {topPicks.map((restaurant, i) => {
-                // A small alternating tilt/offset per card so the set
-                // reads as a loosely stacked deck rather than a flat
-                // list — every card stays fully visible, nothing is
-                // hidden behind another.
-                const tilt = [0, -1.1, 1.1][i] ?? 0;
-                const shift = [0, 9, -9][i] ?? 0;
-                return (
-                  <PopularStack
-                    key={restaurant.slug}
-                    restaurant={restaurant}
-                    rank={i + 1}
-                    delayMs={i * 160}
-                    tilt={tilt}
-                    shift={shift}
-                  />
-                );
-              })}
-            </div>
+            <PopularCarousel picks={topPicks} />
           </div>
         )}
 

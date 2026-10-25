@@ -20,16 +20,13 @@ body {
   to { width: var(--bar-width); }
 }
 
-/* The Popular Picks group's one entrance moment: each card drops and
-   settles into a slightly fanned resting position — alternating tilt
-   and horizontal offset set per card via the --tilt/--shift custom
-   properties — so the ranked set reads as a loosely stacked deck, not
-   three identical cards in a flat list, and arrives as one
-   coordinated reveal (staggered animation-delay) rather than three
-   independent effects. */
+/* The Popular Picks carousel's card arrival: plays on first load, and
+   replays every time the carousel rotates to a new pick (the card is
+   remounted with a fresh key, so this animation fires again each
+   time — not just once on page load). */
 @keyframes pick-in {
-  from { opacity: 0; transform: translateY(36px) scale(0.94) rotate(0deg); }
-  to { opacity: 1; transform: translateY(0) scale(1) rotate(var(--tilt, 0deg)) translateX(var(--shift, 0px)); }
+  from { opacity: 0; transform: translateY(24px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
