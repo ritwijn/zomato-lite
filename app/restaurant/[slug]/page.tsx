@@ -5,6 +5,7 @@ import { Stars } from '@/app/components/Stars';
 import { getRestaurantBySlug } from '@/app/lib/restaurants';
 import { imageForCuisine } from '@/app/lib/cuisineImages';
 import { primaryButtonClass, secondaryLinkClass } from '@/app/components/buttonStyles';
+import { moodColorForRating } from '@/app/lib/moodColor';
 
 export const dynamic = 'force-dynamic';
 
@@ -48,7 +49,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         </div>
 
         <div className="mb-12 flex items-baseline gap-3">
-          <div className="font-[family-name:var(--font-display)] lining-nums text-8xl font-semibold leading-none tracking-tight">
+          <div
+            className="font-[family-name:var(--font-display)] lining-nums text-8xl font-semibold leading-none tracking-tight"
+            style={averageRating !== null ? { color: moodColorForRating(averageRating) } : undefined}
+          >
             {averageRating === null ? '—' : averageRating.toFixed(1)}
           </div>
           <div className="text-sm text-[#6b625b]">

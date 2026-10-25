@@ -4,6 +4,7 @@ import { getAllRestaurants, getFeaturedRestaurantSlug, getRestaurantBySlug } fro
 import { imageForCuisine } from '@/app/lib/cuisineImages';
 import { RestaurantTile } from '@/app/components/RestaurantTile';
 import { HeroStars } from '@/app/components/HeroStars';
+import { moodColorForRating } from '@/app/lib/moodColor';
 
 export const dynamic = 'force-dynamic';
 
@@ -75,7 +76,12 @@ export default async function Home() {
                       <span className="text-[#6b625b]">No reviews yet</span>
                     ) : (
                       <>
-                        <span className="font-medium">{restaurant.averageRating?.toFixed(1)}</span>
+                        <span
+                          className="font-medium"
+                          style={{ color: moodColorForRating(restaurant.averageRating!) }}
+                        >
+                          {restaurant.averageRating?.toFixed(1)}
+                        </span>
                         <span className="text-[#6b625b]">
                           {' '}· {restaurant.totalReviews} {restaurant.totalReviews === 1 ? 'review' : 'reviews'}
                         </span>
