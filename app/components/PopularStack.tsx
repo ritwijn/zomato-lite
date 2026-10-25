@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Stars } from '@/app/components/Stars';
 import { imageForCuisine } from '@/app/lib/cuisineImages';
+import { moodTextClass, moodBarClass } from '@/app/lib/moodColor';
 import type { SpotlightRestaurant } from '@/app/lib/restaurants';
 import type { ReactNode } from 'react';
 
@@ -55,7 +56,7 @@ export function PopularStack({
 
       <div className="mt-3 flex items-end justify-between gap-6">
         <div>
-          <div className="font-[family-name:var(--font-display)] lining-nums text-3xl font-bold leading-none text-white">
+          <div className={`font-[family-name:var(--font-display)] lining-nums text-3xl font-bold leading-none ${moodTextClass(averageRating!)}`}>
             {averageRating!.toFixed(1)}<span className="text-lg text-stone-500">/5</span>
           </div>
           <p className="mt-1 text-xs text-stone-400">
@@ -67,11 +68,11 @@ export function PopularStack({
           <div>
             <div className="mb-1 flex items-center justify-between text-xs text-stone-400">
               <span>Average rating</span>
-              <span className="font-medium text-emerald-400">{ratingPercent.toFixed(0)}%</span>
+              <span className={`font-medium ${moodTextClass(averageRating!)}`}>{ratingPercent.toFixed(0)}%</span>
             </div>
             <div className="h-1.5 w-full overflow-hidden rounded-full bg-stone-800">
               <div
-                className="h-full rounded-full bg-emerald-500"
+                className={`h-full rounded-full ${moodBarClass(averageRating!)}`}
                 style={{ '--bar-width': `${ratingPercent}%`, width: '0%', animation: 'grow-width 1s ease-out forwards' } as React.CSSProperties}
               />
             </div>

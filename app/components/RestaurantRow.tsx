@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { imageForCuisine } from '@/app/lib/cuisineImages';
+import { moodTextClass } from '@/app/lib/moodColor';
 import type { RestaurantSummary } from '@/app/lib/restaurants';
 
 // A compact index row — thumbnail, name, rating — the way a real
@@ -31,7 +32,7 @@ export function RestaurantRow({ restaurant }: { restaurant: RestaurantSummary })
           ) : (
             <>
               <span className="text-amber-500">★</span>{' '}
-              <span className="font-medium text-white">{restaurant.averageRating?.toFixed(1)}</span>
+              <span className={`font-medium ${moodTextClass(restaurant.averageRating!)}`}>{restaurant.averageRating?.toFixed(1)}</span>
               <span className="text-stone-400">
                 {' '}· {restaurant.totalReviews} {restaurant.totalReviews === 1 ? 'review' : 'reviews'}
               </span>
