@@ -6,6 +6,7 @@ import { getRestaurantBySlug } from '@/app/lib/restaurants';
 import { imageForCuisine } from '@/app/lib/cuisineImages';
 import { primaryButtonClass, secondaryLinkClass } from '@/app/components/buttonStyles';
 import { moodColorForRating } from '@/app/lib/moodColor';
+import { formatRelativeTime } from '@/app/lib/relativeTime';
 
 export const dynamic = 'force-dynamic';
 
@@ -71,7 +72,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <>
             <div className="mb-10 rounded-lg border-l-2 border-[#8F6A14] bg-[#8F6A14]/[0.06] py-5 pl-5 pr-4">
               <div className="mb-2 text-[13px] font-medium text-[#8F6A14]">Latest</div>
-              <Stars rating={latestReview.rating} />
+              <div className="flex items-center gap-2">
+                <Stars rating={latestReview.rating} />
+                <span className="text-[13px] text-[#6b625b]">{formatRelativeTime(latestReview.createdAt)}</span>
+              </div>
               <p className="mt-2.5 text-[15px] leading-relaxed">{latestReview.comment}</p>
             </div>
 
@@ -79,7 +83,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               <div className="mb-10 divide-y divide-[#EAE1D3] border-t border-[#EAE1D3]">
                 {reviews.map((review) => (
                   <div key={review.id} className="py-4">
-                    <Stars rating={review.rating} size="sm" />
+                    <div className="flex items-center gap-2">
+                      <Stars rating={review.rating} size="sm" />
+                      <span className="text-[13px] text-[#6b625b]">{formatRelativeTime(review.createdAt)}</span>
+                    </div>
                     <p className="mt-2 text-[15px] leading-relaxed">{review.comment}</p>
                   </div>
                 ))}
