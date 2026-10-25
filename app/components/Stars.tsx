@@ -22,7 +22,7 @@ export function Stars({ rating, size = 'md' }: { rating: number; size?: 'sm' | '
         <StarIcon
           key={n}
           filled={n <= rating}
-          className={`${dimension} ${n <= rating ? 'text-[#D97706]' : 'text-[#E7E5E4]'}`}
+          className={`${dimension} ${n <= rating ? 'text-[#D97706]' : 'text-[#3A3733]'}`}
         />
       ))}
     </div>

@@ -45,10 +45,10 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
   };
 
   return (
-    <div className="min-h-screen bg-[#faf9f5] text-[#1a1a1a]">
+    <div className="min-h-screen bg-[#141414] text-[#f2efe9]">
       <div className="mx-auto max-w-[560px] px-5 py-16">
         {restaurant && (
-          <div className="relative mb-6 h-40 w-full overflow-hidden rounded-md border border-[#E7E5E4] bg-[#E7E5E4]">
+          <div className="relative mb-6 h-40 w-full overflow-hidden rounded-md border border-[#2E2C29] bg-[#2E2C29]">
             <Image
               src={imageForCuisine(restaurant.cuisine)}
               alt={`${restaurant.cuisine} food at ${restaurant.name}`}
@@ -64,7 +64,7 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
             {restaurant ? restaurant.name : 'Loading...'}
           </h1>
           {restaurant && (
-            <p className="mt-1.5 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.08em] text-[#78716C]">
+            <p className="mt-1.5 font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.08em] text-[#9B9690]">
               {restaurant.cuisine} · {restaurant.area}
             </p>
           )}
@@ -84,11 +84,11 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
                     aria-pressed={rating === n}
                     onMouseEnter={() => setHover(n)}
                     onClick={() => setRating(n)}
-                    className={`flex h-11 w-11 items-center justify-center rounded-md border outline-none transition-colors active:scale-95 focus-visible:[box-shadow:0_0_0_2px_#faf9f5,0_0_0_4px_#1A1A1A] ${
-                      filled ? 'border-[#D97706] bg-[#D97706]/10' : 'border-[#E7E5E4] bg-transparent'
+                    className={`flex h-11 w-11 items-center justify-center rounded-md border outline-none transition-colors active:scale-95 focus-visible:[box-shadow:0_0_0_2px_#141414,0_0_0_4px_#F2EFE9] ${
+                      filled ? 'border-[#D97706] bg-[#D97706]/10' : 'border-[#2E2C29] bg-transparent'
                     }`}
                   >
-                    <StarIcon filled={filled} className={`h-[18px] w-[18px] ${filled ? 'text-[#D97706]' : 'text-[#A8A29E]'}`} />
+                    <StarIcon filled={filled} className={`h-[18px] w-[18px] ${filled ? 'text-[#D97706]' : 'text-[#5C5954]'}`} />
                   </button>
                 );
               })}
@@ -102,13 +102,13 @@ export default function ReviewClient({ slug, restaurant }: { slug: string; resta
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="What stood out?"
-              className="w-full rounded-md border border-[#E7E5E4] bg-transparent px-3.5 py-3 text-[15px] leading-relaxed text-[#1a1a1a] outline-none placeholder:text-[#A8A29E] focus:border-[#1A1A1A] focus-visible:[box-shadow:0_0_0_2px_#1A1A1A]"
+              className="w-full rounded-md border border-[#2E2C29] bg-transparent px-3.5 py-3 text-[15px] leading-relaxed text-[#f2efe9] outline-none placeholder:text-[#5C5954] focus:border-[#F2EFE9] focus-visible:[box-shadow:0_0_0_2px_#F2EFE9]"
               rows={5}
             />
           </div>
 
           {error && (
-            <div role="alert" className="text-sm text-[#9a3324]">{error}</div>
+            <div role="alert" className="text-sm text-[#E5584F]">{error}</div>
           )}
 
           <button

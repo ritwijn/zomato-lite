@@ -58,29 +58,6 @@ export async function getAllRestaurants(): Promise<RestaurantSummary[]> {
   return (rows as SummaryRow[]).map(mapSummaryRow);
 }
 
-// The homepage's "Popular picks" stack — the best-rated restaurants that
-// actually have reviews (an unreviewed place can't be "popular"), best
-// first. Ordering already-aggregated numbers for display, same as
-// everywhere else here — not a new calculation.
-export async function getPopularRestaurants(limit: number): Promise<RestaurantSummary[]> {
-  const rows = await sql`
-    SELECT
-      r.slug,
-      r.name,
-      r.cuisine,
-      r.area,
-      AVG(rv.rating)::numeric(10,1) AS average_rating,
-      COUNT(rv.id)::int AS total_reviews
-    FROM restaurants r
-    JOIN reviews rv ON rv.restaurant_id = r.id
-    GROUP BY r.id
-    ORDER BY AVG(rv.rating) DESC, COUNT(rv.id) DESC
-    LIMIT ${limit}
-  `;
-
-  return (rows as SummaryRow[]).map(mapSummaryRow);
-}
-
 export async function getRestaurantBySlug(slug: string): Promise<RestaurantDetail | null> {
   const restaurants = await sql`SELECT id, slug, name, cuisine, area FROM restaurants WHERE slug = ${slug}`;
   if (!restaurants || restaurants.length === 0) {
