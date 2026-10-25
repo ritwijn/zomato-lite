@@ -1,22 +1,17 @@
 import Link from 'next/link';
-import { getAllRestaurants, getSpotlightRestaurant, getPopularRestaurants } from '@/app/lib/restaurants';
+import { getAllRestaurants, getTopRestaurants } from '@/app/lib/restaurants';
 import { RestaurantRow } from '@/app/components/RestaurantRow';
 import { PopularStack } from '@/app/components/PopularStack';
-import { PopularPickCard } from '@/app/components/PopularPickCard';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [restaurants, spotlight, popular] = await Promise.all([
+  const [restaurants, topPicks] = await Promise.all([
     getAllRestaurants(),
-    getSpotlightRestaurant(),
-    getPopularRestaurants(3),
+    getTopRestaurants(3),
   ]);
 
-  // popular[0] is the same restaurant as spotlight (same ranking
-  // query) — runners-up are whatever's left of the top 3.
-  const runnersUp = spotlight ? popular.filter((r) => r.slug !== spotlight.slug) : [];
-  const pickedSlugs = new Set([spotlight?.slug, ...runnersUp.map((r) => r.slug)].filter(Boolean));
+  const pickedSlugs = new Set(topPicks.map((r) => r.slug));
   // Everything shown above already gets its own card — repeating any
   // of them in the list below would be the exact duplicate-card
   // problem this app has already hit and fixed once.
@@ -32,9 +27,9 @@ export default async function Home() {
             </h1>
             <p className="mt-0.5 text-xs text-stone-400">Honest ratings from people who actually ate there.</p>
           </div>
-          {spotlight && (
+          {topPicks[0] && (
             <Link
-              href={`/review/${spotlight.slug}`}
+              href={`/review/${topPicks[0].slug}`}
               className="inline-flex shrink-0 items-center gap-1 rounded-md bg-white px-3 py-1.5 text-sm font-medium text-[#0A0A0C] outline-none transition-colors hover:bg-stone-200 focus-visible:[box-shadow:0_0_0_2px_#0A0A0C,0_0_0_4px_#FFFFFF]"
             >
               + Write review
@@ -44,19 +39,16 @@ export default async function Home() {
       </div>
 
       <div className="mx-auto max-w-[560px] px-5 pb-16 pt-8">
-        {spotlight && (
+        {topPicks.length > 0 && (
           <div className="mb-10">
             <p className="mb-3 font-[family-name:var(--font-mono)] text-xs uppercase tracking-widest text-stone-400">
               Popular picks
             </p>
-            <PopularStack restaurant={spotlight} />
-            {runnersUp.length > 0 && (
-              <div className="mt-3 grid grid-cols-2 gap-3">
-                {runnersUp.map((restaurant, i) => (
-                  <PopularPickCard key={restaurant.slug} restaurant={restaurant} rank={i + 2} delayMs={(i + 1) * 120} />
-                ))}
-              </div>
-            )}
+            <div className="space-y-4">
+              {topPicks.map((restaurant, i) => (
+                <PopularStack key={restaurant.slug} restaurant={restaurant} rank={i + 1} delayMs={i * 120} />
+              ))}
+            </div>
           </div>
         )}
 

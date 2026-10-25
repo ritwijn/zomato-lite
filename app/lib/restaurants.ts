@@ -125,19 +125,17 @@ export async function getRestaurantIdBySlug(slug: string): Promise<number | null
   return rows.length > 0 ? rows[0].id : null;
 }
 
-// Ranks restaurants with reviews by average, best first — real,
-// already-aggregated numbers, just ordered for display. Used for the
-// #2/#3 "Popular picks" cards; the #1 spot gets the fuller
-// getSpotlightRestaurant() treatment below.
-export async function getPopularRestaurants(limit: number): Promise<RestaurantSummary[]> {
-  const rows = await sql`
-    SELECT
-      r.slug,
-      r.name,
-      r.cuisine,
-      r.area,
-      AVG(rv.rating)::numeric(10,1) AS average_rating,
-      COUNT(rv.id)::int AS total_reviews
+export type SpotlightRestaurant = RestaurantDetail & { positivePercentage: number };
+
+// The top N restaurants by average rating (real, already-aggregated,
+// just ordered), each with the same full detail and one more honest
+// number — the share of its own reviews rated 4 stars or higher.
+// Every "popular pick" card gets identical treatment because this
+// returns identical data for each of them; there's no separate
+// "lighter" query for #2/#3.
+export async function getTopRestaurants(limit: number): Promise<SpotlightRestaurant[]> {
+  const top = await sql`
+    SELECT r.slug
     FROM restaurants r
     JOIN reviews rv ON rv.restaurant_id = r.id
     GROUP BY r.id
@@ -145,37 +143,20 @@ export async function getPopularRestaurants(limit: number): Promise<RestaurantSu
     LIMIT ${limit}
   `;
 
-  return (rows as SummaryRow[]).map(mapSummaryRow);
-}
+  const results: SpotlightRestaurant[] = [];
+  for (const row of top) {
+    const detail = await getRestaurantBySlug(row.slug);
+    if (!detail) continue;
 
-export type SpotlightRestaurant = RestaurantDetail & { positivePercentage: number };
+    const positive = await sql`
+      SELECT (COUNT(*) FILTER (WHERE rv.rating >= 4) * 100.0 / COUNT(*))::numeric(10,0) AS positive_percentage
+      FROM reviews rv
+      JOIN restaurants r ON r.id = rv.restaurant_id
+      WHERE r.slug = ${row.slug}
+    `;
 
-// The homepage spotlight: the best-rated restaurant that actually has
-// reviews, plus one more real, honestly-computed number — the share of
-// its reviews rated 4 stars or higher. Both numbers come straight from
-// Postgres; neither is invented, and both would be wrong if the app
-// ever stored a cached average instead of computing it fresh.
-export async function getSpotlightRestaurant(): Promise<SpotlightRestaurant | null> {
-  const top = await sql`
-    SELECT r.slug
-    FROM restaurants r
-    JOIN reviews rv ON rv.restaurant_id = r.id
-    GROUP BY r.id
-    ORDER BY AVG(rv.rating) DESC, COUNT(rv.id) DESC
-    LIMIT 1
-  `;
-  if (top.length === 0) return null;
+    results.push({ ...detail, positivePercentage: parseFloat(positive[0].positive_percentage) });
+  }
 
-  const slug = top[0].slug;
-  const detail = await getRestaurantBySlug(slug);
-  if (!detail) return null;
-
-  const positive = await sql`
-    SELECT (COUNT(*) FILTER (WHERE rv.rating >= 4) * 100.0 / COUNT(*))::numeric(10,0) AS positive_percentage
-    FROM reviews rv
-    JOIN restaurants r ON r.id = rv.restaurant_id
-    WHERE r.slug = ${slug}
-  `;
-
-  return { ...detail, positivePercentage: parseFloat(positive[0].positive_percentage) };
+  return results;
 }

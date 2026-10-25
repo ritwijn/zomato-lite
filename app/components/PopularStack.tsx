@@ -4,19 +4,26 @@ import { Stars } from '@/app/components/Stars';
 import { imageForCuisine } from '@/app/lib/cuisineImages';
 import type { SpotlightRestaurant } from '@/app/lib/restaurants';
 
-// The #1, best-rated restaurant — the full treatment, next to two
-// simpler runner-up cards (PopularPickCard). Both bars below are real,
-// already-computed numbers rendered as a fill, not invented stats: the
-// average rating itself, and the actual share of reviews rated 4
-// stars or higher.
-export function PopularStack({ restaurant }: { restaurant: SpotlightRestaurant }) {
+// One "popular pick" card — same full treatment for every rank. Both
+// bars below are real, already-computed numbers rendered as a fill,
+// not invented stats: the average rating itself, and the actual share
+// of reviews rated 4 stars or higher.
+export function PopularStack({
+  restaurant,
+  rank,
+  delayMs = 0,
+}: {
+  restaurant: SpotlightRestaurant;
+  rank: number;
+  delayMs?: number;
+}) {
   const { slug, name, cuisine, area, averageRating, totalReviews, latestReview, positivePercentage } = restaurant;
   const ratingPercent = (averageRating! / 5) * 100;
 
   return (
     <div
       className="rounded-xl border border-stone-800/80 bg-[#121215] p-4 sm:p-5"
-      style={{ animation: 'pick-in 0.5s ease-out 0ms backwards' }}
+      style={{ animation: `pick-in 0.5s ease-out ${delayMs}ms backwards` }}
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg">
         <Image
@@ -24,13 +31,13 @@ export function PopularStack({ restaurant }: { restaurant: SpotlightRestaurant }
           alt={`${cuisine} food at ${name}`}
           fill
           sizes="560px"
-          priority
+          priority={rank === 1}
           className="object-cover"
         />
       </div>
 
       <span className="mt-4 inline-block rounded-full bg-amber-500/15 px-2.5 py-1 font-[family-name:var(--font-mono)] text-[10px] font-medium uppercase tracking-widest text-amber-400">
-        Spotlight
+        No. {rank}
       </span>
 
       <h2 className="mt-3 font-[family-name:var(--font-display)] text-2xl font-bold text-white">{name}</h2>
